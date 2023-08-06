@@ -21,15 +21,25 @@ var ball = {
     dy:3
 }
 
+wristX = "";
+wristY = "";
+wristScore = "";
+
 function setup(){
   var canvas =  createCanvas(700,600);
   canvas.parent("canvas");
+  video = createCapture(VIDEO);
+  video.hide();
+
+  posenet = ml5.poseNet(video, modelLoaded);
+  posenet.on('pose', gotResults);
 }
 
 
 function draw(){
 
  background(0); 
+ image(video, 0, 0, 700, 600);
 
  fill("black");
  stroke("black");
@@ -66,8 +76,13 @@ function draw(){
    
    //function move call which in very important
     move();
-}
 
+    if(wristScore > 0.2){
+        fill('#32CD32');
+        stroke('#000000');
+        circle(wristX, wristY, 20);
+    }
+}
 
 
 //function reset when ball does notcame in the contact of padde
@@ -163,4 +178,20 @@ function paddleInCanvas(){
   if(mouseY < 0){
     mouseY =0;
   }  
+}
+
+function modelLoaded(){
+  console.log("Model is loaded");
+}
+
+function gotResults(results){
+  console.log(results);
+  if(results.length > 0){
+    wristX = results[0].pose.rightWrist.x;
+    wristY = results[0].pose.rightWrist.y;
+    wristScore = results[0].pose.rightWrist.score;
+
+    
+  }
+  
 }

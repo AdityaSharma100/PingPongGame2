@@ -35,3 +35,10 @@ body {
     bottom: 0px;
     position: sticky;
 }
+
+canvas{
+    border-radius: 20px;
+    border-color: black;
+    border-width: 3px;
+    box-shadow: 7px 7px 11px grey;
+}
